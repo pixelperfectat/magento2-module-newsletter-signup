@@ -12,9 +12,12 @@ These follow the pixelperfectat module issue-tracking rule. They add to the comm
   commit keyword and the changelog section: `added`, `changed`, `fixed`, `deprecated`, `removed` or `security`.
   Add `source:internal` (or `source:customer` when the work came from a customer request). Triage-role labels
   (see `triage-labels.md`) come on top.
-- **Spec = parent feature issue.** What `/to-spec` publishes is titled `Feature: <name>` and labelled
-  `type:feature` and `feature:newsletter-signup`. Tickets from `/to-tickets` are its sub-issues, titled
-  `Task: <name>`.
+- **Specs live in the repo.** When a skill publishes a spec, write the full text to `docs/specs/<feature-slug>.md`
+  and commit it through a pull request; that file is the source of truth and changes with the design. Then
+  create the parent issue titled `Feature: <name>`, labelled `type:feature` and `feature:<feature-slug>`, whose
+  body is only the problem in two lines, a link to the spec file and the task list. Never copy the spec text
+  into the issue. Tickets from `/to-tickets` read the spec file and become sub-issues of the parent.
+- **Tickets** are titled `Task: <name>` and are sub-issues of the `Feature:` parent.
 - **Sub-issues with this `gh` (older than 2.94):** use the API form from **Make an issue a sub-issue of a parent**.
 - **Commits** keep the keyword-first subject and end with the issue: `Add subscription status check (#3)`. The
   commit that finishes the issue adds a `Closes #3` trailer.
