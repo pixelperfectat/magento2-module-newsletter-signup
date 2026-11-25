@@ -79,7 +79,7 @@ module signs the shopper up after the order.
 
 ## Order confirmation page block
 
-On the Luma checkout success page, a shopper whose order email is not subscribed sees a block with the benefit
+On the checkout success page, in the Luma and the Hyvä theme, a shopper whose order email is not subscribed sees a block with the benefit
 text and a "Subscribe" button. The button sends the order's email address through Magento's own newsletter
 sign-up, so Magento's confirmation email and messages apply as usual, and records the source "Order
 confirmation page". The shopper then lands on the home page with Magento's success message.
@@ -93,6 +93,18 @@ Confirmation Page:
 | Hide for Unsubscribed | No |
 | Benefit Text | A placeholder; write your own |
 | Tracking Parameters | Empty. Query parameters added to the page the shopper lands on, such as `utm_source=shop&utm_medium=confirmation_page` |
+
+### Hyvä theme
+
+The Hyvä theme gets its own template with Tailwind classes, picked through the `hyva_` layout handle of the
+success page. The module adds itself to the Hyvä Tailwind build when `bin/magento hyva:config:generate` runs;
+Hyvä is not a dependency, and without Hyvä nothing changes. After installing the module in a Hyvä shop,
+regenerate the config and rebuild the theme styles:
+
+```bash
+bin/magento hyva:config:generate
+cd app/design/frontend/<Vendor>/<theme>/web/tailwind && npm run build
+```
 
 ## Sign-up source
 
