@@ -3,4 +3,43 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="PixelPerfect\NewsletterSignup\Api\Service\SubscriptionStatusCheckInterface"
                 type="PixelPerfect\NewsletterSignup\Service\SubscriptionStatusCheck"/>
+    <preference for="PixelPerfect\NewsletterSignup\Api\Service\SignupSourceListInterface"
+                type="PixelPerfect\NewsletterSignup\Service\SignupSourceList"/>
+    <preference for="PixelPerfect\NewsletterSignup\Api\Service\SignupSourceContextInterface"
+                type="PixelPerfect\NewsletterSignup\Service\SignupSourceContext"/>
+    <preference for="PixelPerfect\NewsletterSignup\Api\Service\SignupSourceRecorderInterface"
+                type="PixelPerfect\NewsletterSignup\Service\SignupSourceRecorder"/>
+
+    <!-- Add a source: one more item here, or a row in Stores > Configuration > Customers > Newsletter -->
+    <type name="PixelPerfect\NewsletterSignup\Service\SignupSourceList">
+        <arguments>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
+            <argument name="defaultSources" xsi:type="array">
+                <item name="checkout" xsi:type="string" translate="true">Checkout</item>
+                <item name="confirmation_page" xsi:type="string" translate="true">Order confirmation page</item>
+                <item name="order_email" xsi:type="string" translate="true">Order email</item>
+                <item name="shipment_email" xsi:type="string" translate="true">Shipment email</item>
+                <item name="website_footer" xsi:type="string" translate="true">Website footer</item>
+                <item name="signup_page" xsi:type="string" translate="true">Sign-up page</item>
+                <item name="other" xsi:type="string" translate="true">Other</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- The context holds the source an entry point set for this request, so it is shared -->
+    <type name="PixelPerfect\NewsletterSignup\Service\SignupSourceContext" shared="true">
+        <arguments>
+            <argument name="session" xsi:type="object">PixelPerfect\NewsletterSignup\Model\Session</argument>
+        </arguments>
+    </type>
+    <virtualType name="PixelPerfect\NewsletterSignup\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">pixelperfect_newsletter_signup</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PixelPerfect\NewsletterSignup\Model\Session" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">PixelPerfect\NewsletterSignup\Model\Session\Storage</argument>
+        </arguments>
+    </virtualType>
 </config>

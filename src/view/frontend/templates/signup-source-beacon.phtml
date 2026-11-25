@@ -1,0 +1,26 @@
+<?php declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PixelPerfect\NewsletterSignup\ViewModel\SignupSourceBeacon;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var SignupSourceBeacon $beacon */
+$beacon = $block->getData('beacon');
+$parameter = $escaper->escapeJs($beacon->getParameterName());
+$url = $escaper->escapeJs($beacon->getRememberUrl());
+$script = <<<JS
+(function () {
+    var source = new URLSearchParams(window.location.search).get('{$parameter}');
+    if (source && window.fetch) {
+        var query = new URLSearchParams();
+        query.set('{$parameter}', source);
+        fetch('{$url}?' + query.toString(), {credentials: 'same-origin'});
+    }
+})();
+JS;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $script, false) ?>

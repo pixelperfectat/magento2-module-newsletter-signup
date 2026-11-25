@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="pixelperfect_newsletter_signup_source" resource="default" engine="innodb"
+           comment="Where each newsletter subscriber signed up">
+        <column xsi:type="int" name="subscriber_id" unsigned="true" nullable="false" identity="false"
+                comment="Newsletter subscriber ID"/>
+        <column xsi:type="varchar" name="source_code" length="64" nullable="false" comment="Sign-up source code"/>
+        <column xsi:type="timestamp" name="recorded_at" on_update="false" nullable="false"
+                default="CURRENT_TIMESTAMP" comment="When the source was recorded"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="subscriber_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="PIXELPERFECT_NEWSLETTER_SIGNUP_SOURCE_SUBSCRIBER_ID_NEWSLETTER_SUBSCRIBER_SUBSCRIBER_ID"
+                    table="pixelperfect_newsletter_signup_source" column="subscriber_id"
+                    referenceTable="newsletter_subscriber" referenceColumn="subscriber_id" onDelete="CASCADE"/>
+        <index referenceId="PIXELPERFECT_NEWSLETTER_SIGNUP_SOURCE_SOURCE_CODE" indexType="btree">
+            <column name="source_code"/>
+        </index>
+    </table>
+</schema>
