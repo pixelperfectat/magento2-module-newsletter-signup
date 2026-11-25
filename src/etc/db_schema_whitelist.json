@@ -12,5 +12,10 @@
             "PRIMARY": true,
             "FK_32F50D8ABBA1F063B3F4892FD0420D18": true
         }
+    },
+    "quote": {
+        "column": {
+            "pixelperfect_newsletter_opt_in": true
+        }
     }
 }

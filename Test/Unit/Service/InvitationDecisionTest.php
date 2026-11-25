@@ -233,7 +233,10 @@ class InvitationDecisionTest extends TestCase
 
         $this->assertFalse($this->decision->shouldInvite('checkout', self::EMAIL, 1, false));
         $this->assertCount(1, $this->loggedErrors);
-        $this->assertStringContainsString('Database gone', $this->loggedErrors[0]['message']);
+        $this->assertSame(
+            'Newsletter sign-up: the subscription status could not be read: Database gone',
+            $this->loggedErrors[0]['message']
+        );
         $this->assertInstanceOf(\RuntimeException::class, $this->loggedErrors[0]['context']['exception'] ?? null);
     }
 
@@ -275,7 +278,8 @@ class InvitationDecisionTest extends TestCase
         $storeManager->method('getStore')->willReturnCallback(
             function (mixed $storeId): StoreInterface {
                 $store = $this->createMock(StoreInterface::class);
-                $store->method('getWebsiteId')->willReturn($this->websites[(int)$storeId]);
+                // Magento hands the website id over as a string
+                $store->method('getWebsiteId')->willReturn((string)$this->websites[(int)$storeId]);
                 return $store;
             }
         );

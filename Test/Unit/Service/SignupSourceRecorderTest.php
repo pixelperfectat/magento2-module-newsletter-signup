@@ -160,7 +160,9 @@ class SignupSourceRecorderTest extends TestCase
             . '"_6":"not a row","_7":{"code":" spaced ","label":" Spaced "}}';
 
         $labels = [];
-        foreach ($this->buildList()->getAll() as $source) {
+        $sources = $this->buildList()->getAll();
+        $this->assertTrue(array_is_list($sources));
+        foreach ($sources as $source) {
             $labels[$source->getCode()] = $source->getLabel();
         }
 

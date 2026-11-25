@@ -5,4 +5,8 @@
         <observer name="pixelperfect_newsletter_signup_record_source"
                   instance="PixelPerfect\NewsletterSignup\Observer\RecordSignupSource"/>
     </event>
+    <event name="checkout_submit_all_after">
+        <observer name="pixelperfect_newsletter_signup_subscribe_after_checkout"
+                  instance="PixelPerfect\NewsletterSignup\Observer\SubscribeAfterCheckout"/>
+    </event>
 </config>

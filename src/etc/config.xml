@@ -6,6 +6,7 @@
             <signup_checkout>
                 <enabled>1</enabled>
                 <hide_unsubscribed>0</hide_unsubscribed>
+                <benefit_text>Yes, sign me up for the newsletter and keep me posted on new products and offers.</benefit_text>
             </signup_checkout>
             <signup_confirmation_page>
                 <enabled>1</enabled>

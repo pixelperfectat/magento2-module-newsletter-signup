@@ -18,4 +18,8 @@
             <column name="source_code"/>
         </index>
     </table>
+    <table name="quote" resource="checkout">
+        <column xsi:type="smallint" name="pixelperfect_newsletter_opt_in" unsigned="true" nullable="true"
+                comment="Newsletter sign-up box in the checkout: 1 ticked, 0 unticked"/>
+    </table>
 </schema>
