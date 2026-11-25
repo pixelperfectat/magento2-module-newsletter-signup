@@ -10,8 +10,6 @@ Invites shoppers to the newsletter only when they are not subscribed yet, and sa
 Magento's own double opt-in stays in charge: the module never subscribes anyone without the confirmation
 click.
 
-For Hyvä Checkout, install `pixelperfectat/magento2-module-newsletter-signup-hyva-checkout` as well.
-
 ## Status
 
 In development, not released yet. The first release is `0.1.0`.
