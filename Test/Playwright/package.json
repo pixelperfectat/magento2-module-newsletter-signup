@@ -1,0 +1,18 @@
+{
+  "name": "newsletter-signup-playwright",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright storefront tests for the newsletter sign-up module",
+  "scripts": {
+    "test": "playwright test",
+    "test:luma": "playwright test --project=luma",
+    "test:hyva": "playwright test --project=hyva",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "dotenv": "^16.4.0"
+  }
+}
