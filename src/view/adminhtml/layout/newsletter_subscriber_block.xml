@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.newslettrer.subscriber.grid">
+            <arguments>
+                <argument name="dataSource" xsi:type="object" shared="false">PixelPerfect\NewsletterSignup\Model\ResourceModel\Subscriber\Grid\Collection</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="adminhtml.newslettrer.subscriber.grid.columnSet">
+            <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newslettrer.subscriber.grid.columnSet.signup_source" as="signup_source" after="status">
+                <arguments>
+                    <argument name="header" xsi:type="string" translate="true">Source</argument>
+                    <argument name="index" xsi:type="string">signup_source</argument>
+                    <argument name="type" xsi:type="string">options</argument>
+                    <argument name="options" xsi:type="options" model="PixelPerfect\NewsletterSignup\Model\Config\Source\SignupSourceOptions"/>
+                    <argument name="header_css_class" xsi:type="string">col-signup-source</argument>
+                    <argument name="column_css_class" xsi:type="string">col-signup-source</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
