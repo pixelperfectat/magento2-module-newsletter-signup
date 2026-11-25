@@ -10,6 +10,22 @@ Invites shoppers to the newsletter only when they are not subscribed yet, and sa
 Magento's own double opt-in stays in charge: the module never subscribes anyone without the confirmation
 click.
 
+## Subscription status check
+
+Ask for the status of an email address on a website through
+`PixelPerfect\NewsletterSignup\Api\Service\SubscriptionStatusCheckInterface::getStatus($email, $websiteId)`. It
+returns a `SubscriptionStatus` value:
+
+| Value | Meaning |
+|---|---|
+| `NotSubscribed` | No subscriber record on this website |
+| `Pending` | Confirmation email sent, link not clicked yet (Magento "Not Activated" or "Unconfirmed") |
+| `Confirmed` | Double opt-in completed (Magento "Subscribed") |
+| `Unsubscribed` | Was subscribed, then opted out |
+
+The email address is matched regardless of case and surrounding spaces. Replace the implementation with a
+`<preference>` in `di.xml` if your shop keeps subscriptions elsewhere.
+
 ## Status
 
 In development, not released yet. The first release is `0.1.0`.
