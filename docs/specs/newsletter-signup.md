@@ -39,6 +39,12 @@ be won back). A setting per place hides them for unsubscribed people where a sho
 
 Nobody is ever subscribed without their own action and Magento's confirmation click.
 
+**Sign-up source.** Every new subscription records where it came from: the checkout, the order confirmation
+page, the order email, the shipment email, or any other place a shop defines (website footer, sign-up page,
+landing page, …). The source shows as a column with a filter in the admin newsletter subscriber grid, so a shop
+owner can count sign-ups per place. Links from emails or campaigns carry a source parameter that the shop
+remembers until the shopper signs up.
+
 ## User Stories
 
 1. As a shop owner, I want to know for any email address whether it is not subscribed, pending, confirmed or unsubscribed, so that every newsletter invitation can depend on it.
@@ -84,6 +90,13 @@ Nobody is ever subscribed without their own action and Magento's confirmation cl
 41. As a shop owner on Hyvä Checkout, I want the same checkout sign-up line there, by installing the companion module, so that both checkouts behave the same.
 42. As a shop owner without Hyvä Checkout, I want the core module to install and compile without it, so that I never need a commercial package I do not use.
 43. As a developer, I want every setting overridable in `di.xml` or the admin, and the status check replaceable by preference, so that I can adapt the module without editing it.
+44. As a shop owner, I want every new subscription to record where it came from, so that I know which invitation works.
+45. As a shop owner, I want the source as a column and filter in the admin newsletter subscriber grid, so that I can count sign-ups per place without another tool.
+46. As a shop owner, I want sign-ups from the checkout line and from the confirmation page block recorded with those sources automatically, so that I do not have to configure anything.
+47. As a shop owner, I want a link with a source parameter (for example in the order or shipment email) to credit that source when the shopper signs up later in the same visit, so that email invitations are counted too.
+48. As a shop owner, I want to define my own sources, such as website footer, sign-up page or landing page, so that new places are counted without changing the module.
+49. As a shop owner, I want an unknown or missing source recorded as "other", so that junk parameter values never pollute the list.
+50. As a shop owner, I want the first recorded source kept when someone subscribes again, so that the original place gets the credit.
 
 ## Implementation Decisions
 
@@ -131,7 +144,18 @@ Nobody is ever subscribed without their own action and Magento's confirmation cl
   (sanitised the same way as the invitation). Unsubscribed: the invitation by default, with a setting to hide
   it. Core is an optional dependency (`suggest`, plus a soft lookup that tolerates its absence); without core
   the behaviour is unchanged. Any error from the status check is logged and falls back to the invitation as
-  today. Both the order and the shipment email follow the same rule.
+  today. Both the order and the shipment email follow the same rule. The default invitation block's link carries the
+  source parameter (order email or shipment email), and the README tells shops to add it to their own block.
+- **Sign-up source (seam 4).** Core keeps its own record of the source per subscriber (Magento's subscriber
+  table has no such field): one row per subscriber with the source code and when it was recorded; the first
+  source wins. A core service records the source when Magento creates a subscription, whichever entry point
+  created it (Magento's own sign-up form, the checkout opt-in, the confirmation page button). The source comes
+  from, in order: the entry point that set it explicitly (checkout, confirmation page), the source remembered in
+  the session from a request parameter, else "other". The known sources are an extensible list of code and
+  label: defaults checkout, confirmation page, order email, shipment email, website footer, sign-up page,
+  other; more can be added in `di.xml` and as extra code/label rows in the admin. A parameter value that is not
+  a known source code is ignored. The admin newsletter subscriber grid gets a "Source" column with a filter.
+  Removing the module leaves Magento's subscribers untouched.
 - **Extensibility.** Every service has an interface and is bound by preference; settings have defaults that can
   be overridden in `di.xml`; the places of the invitation decision are an injected list.
 
@@ -149,6 +173,9 @@ Nobody is ever subscribed without their own action and Magento's confirmation cl
   on and off, a guest when guest subscription is not allowed.
 - **Seam 3, checkout opt-in:** ticked → subscription manager called with the order email and store; unticked
   or missing → not called; subscription manager failure → logged, no exception.
+- **Seam 4, sign-up source:** explicit source wins over the session; session parameter credited on a later
+  sign-up; unknown and missing values → other; first source kept on re-subscription; a source added via
+  configuration is accepted.
 - **Sales email:** the existing invitation view-model tests are the prior art: per status, without core
   installed, and with a failing status check.
 - **Templates and the Hyvä Checkout component** are thin and have no logic of their own; they are verified in
