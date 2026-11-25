@@ -1,0 +1,38 @@
+<?php declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use PixelPerfect\NewsletterSignup\ViewModel\ConfirmationPageInvitation;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ConfirmationPageInvitation $invitation */
+$invitation = $block->getData('invitation');
+if (!$invitation->isVisible()) {
+    return;
+}
+?>
+<section class="newsletter-signup-confirmation card my-8 max-w-2xl"
+         aria-labelledby="newsletter-signup-confirmation-title">
+    <h2 id="newsletter-signup-confirmation-title" class="mb-2 text-xl font-semibold">
+        <?= $escaper->escapeHtml(__('Our Newsletter')) ?>
+    </h2>
+    <p class="mb-4"><?= /* @noEscape */ nl2br($escaper->escapeHtml($invitation->getBenefitText())) ?></p>
+    <form method="post" action="<?= $escaper->escapeUrl($invitation->getFormAction()) ?>"
+          class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <?= $block->getBlockHtml('formkey') ?>
+        <input type="hidden" name="email" value="<?= $escaper->escapeHtmlAttr($invitation->getEmail()) ?>"/>
+        <input type="hidden"
+               name="<?= $escaper->escapeHtmlAttr($invitation->getSourceParameterName()) ?>"
+               value="<?= $escaper->escapeHtmlAttr($invitation->getSourceCode()) ?>"/>
+        <input type="hidden"
+               name="<?= $escaper->escapeHtmlAttr($invitation->getRedirectFieldName()) ?>"
+               value="<?= $escaper->escapeHtmlAttr($invitation->getRedirectValue()) ?>"/>
+        <p class="text-sm text-gray-600 break-all">
+            <?= $escaper->escapeHtml(__('Your email address: %1', $invitation->getEmail())) ?>
+        </p>
+        <button type="submit" class="btn btn-primary shrink-0">
+            <?= $escaper->escapeHtml(__('Subscribe')) ?>
+        </button>
+    </form>
+</section>

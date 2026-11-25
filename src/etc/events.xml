@@ -9,4 +9,8 @@
         <observer name="pixelperfect_newsletter_signup_subscribe_after_checkout"
                   instance="PixelPerfect\NewsletterSignup\Observer\SubscribeAfterCheckout"/>
     </event>
+    <event name="hyva_config_generate_before">
+        <observer name="pixelperfect_newsletter_signup_hyva_tailwind"
+                  instance="PixelPerfect\NewsletterSignup\Observer\RegisterModuleForHyvaConfig"/>
+    </event>
 </config>
