@@ -84,6 +84,10 @@ text and a "Subscribe" button. The button sends the order's email address throug
 sign-up, so Magento's confirmation email and messages apply as usual, and records the source "Order
 confirmation page". The shopper then lands on the home page with Magento's success message.
 
+A shopper who ticked the checkout sign-up line for this order sees a short note instead: "check your inbox" while
+the subscription waits for the confirmation click, or a thank-you when the shop does not ask for confirmation.
+If that sign-up did not go through, the block invites as usual.
+
 Settings per store view, under Stores > Configuration > Customers > Newsletter > Sign-up Block on the Order
 Confirmation Page:
 
@@ -93,6 +97,8 @@ Confirmation Page:
 | Hide for Unsubscribed | No |
 | Benefit Text | A placeholder; write your own |
 | Tracking Parameters | Empty. Query parameters added to the page the shopper lands on, such as `utm_source=shop&utm_medium=confirmation_page` |
+| Note After a Checkout Sign-up, Confirmation Pending | A placeholder "check your inbox" text |
+| Note After a Checkout Sign-up, Subscribed | A placeholder thank-you text |
 
 ### Hyvä theme
 
