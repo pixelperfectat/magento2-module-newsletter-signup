@@ -6,6 +6,8 @@ Invites shoppers to the newsletter only when they are not subscribed yet, and sa
   sent, link not clicked yet), confirmed, or unsubscribed. Other modules can call it.
 - A sign-up line with a short benefit in the Luma checkout.
 - A sign-up block on the order confirmation page, for the Luma and the Hyvä theme.
+- An invitation decision per place (checkout, order confirmation page, or a place of your own): invite only
+  people who are not subscribed, and by default those who unsubscribed.
 - The place each subscriber signed up from, shown as a "Source" column with a filter in the admin newsletter
   subscriber grid.
 
@@ -27,6 +29,43 @@ returns a `SubscriptionStatus` value:
 
 The email address is matched regardless of case and surrounding spaces. Replace the implementation with a
 `<preference>` in `di.xml` if your shop keeps subscriptions elsewhere.
+
+## Who gets invited
+
+`PixelPerfect\NewsletterSignup\Api\Service\InvitationDecisionInterface::shouldInvite($place, $email, $storeId,
+$isGuest)` answers whether a place invites an email address in a store view:
+
+| Status | Invited |
+|---|---|
+| Not subscribed | Yes |
+| Pending | No |
+| Confirmed | No |
+| Unsubscribed | Yes, unless the place's "Hide for Unsubscribed" setting is on |
+
+Nobody is invited when the place is switched off, when Magento's newsletter is disabled, or, for a guest, when
+Magento does not allow guest subscriptions. When the status cannot be read, nobody is invited and the error is
+logged.
+
+The places are `checkout` and `confirmation_page`. Add your own as one more item of the `places` argument of
+`PixelPerfect\NewsletterSignup\Service\InvitationDecision` in `di.xml`: the item name is the place code, the
+value the configuration group that holds its `enabled` and `hide_unsubscribed` flags.
+
+## Order confirmation page block
+
+On the Luma checkout success page, a shopper whose order email is not subscribed sees a block with the benefit
+text and a "Subscribe" button. The button sends the order's email address through Magento's own newsletter
+sign-up, so Magento's confirmation email and messages apply as usual, and records the source "Order
+confirmation page". The shopper then lands on the home page with Magento's success message.
+
+Settings per store view, under Stores > Configuration > Customers > Newsletter > Sign-up Block on the Order
+Confirmation Page:
+
+| Setting | Default |
+|---|---|
+| Enabled | Yes |
+| Hide for Unsubscribed | No |
+| Benefit Text | A placeholder; write your own |
+| Tracking Parameters | Empty. Query parameters added to the page the shopper lands on, such as `utm_source=shop&utm_medium=confirmation_page` |
 
 ## Sign-up source
 
