@@ -9,6 +9,19 @@
                 type="PixelPerfect\NewsletterSignup\Service\SignupSourceContext"/>
     <preference for="PixelPerfect\NewsletterSignup\Api\Service\SignupSourceRecorderInterface"
                 type="PixelPerfect\NewsletterSignup\Service\SignupSourceRecorder"/>
+    <preference for="PixelPerfect\NewsletterSignup\Api\Service\InvitationDecisionInterface"
+                type="PixelPerfect\NewsletterSignup\Service\InvitationDecision"/>
+
+    <!-- Places that invite to the newsletter, each with the configuration group of its enabled and
+         hide_unsubscribed flags. Add a place: one more item here. -->
+    <type name="PixelPerfect\NewsletterSignup\Service\InvitationDecision">
+        <arguments>
+            <argument name="places" xsi:type="array">
+                <item name="checkout" xsi:type="string">newsletter/signup_checkout</item>
+                <item name="confirmation_page" xsi:type="string">newsletter/signup_confirmation_page</item>
+            </argument>
+        </arguments>
+    </type>
 
     <!-- Add a source: one more item here, or a row in Stores > Configuration > Customers > Newsletter -->
     <type name="PixelPerfect\NewsletterSignup\Service\SignupSourceList">
