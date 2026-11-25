@@ -26,7 +26,7 @@ class CheckoutSignupConfigProviderTest extends TestCase
 
     private bool $lookupFails = false;
 
-    /** @var list<string> */
+    /** @var list<array{message: string, context: array<string, mixed>}> */
     private array $loggedErrors = [];
 
     public function testAnInvitedCartShowsTheLineUnticked(): void
@@ -89,6 +89,18 @@ class CheckoutSignupConfigProviderTest extends TestCase
         $this->assertFalse($config['invited']);
         $this->assertFalse($config['optIn']);
         $this->assertCount(1, $this->loggedErrors);
+        $this->assertSame(
+            'Newsletter sign-up: the checkout line could not be prepared: Database gone',
+            $this->loggedErrors[0]['message']
+        );
+        $this->assertInstanceOf(\RuntimeException::class, $this->loggedErrors[0]['context']['exception'] ?? null);
+    }
+
+    public function testAMissingBenefitTextIsEmpty(): void
+    {
+        unset($this->config['newsletter/signup_checkout/benefit_text']);
+
+        $this->assertSame('', $this->configFor($this->quote(null, null))['benefitText']);
     }
 
     /**
@@ -119,8 +131,8 @@ class CheckoutSignupConfigProviderTest extends TestCase
 
         $logger = $this->createMock(LoggerInterface::class);
         $logger->method('error')->willReturnCallback(
-            function (string|\Stringable $message): void {
-                $this->loggedErrors[] = (string)$message;
+            function (string|\Stringable $message, array $context = []): void {
+                $this->loggedErrors[] = ['message' => (string)$message, 'context' => $context];
             }
         );
 
@@ -132,8 +144,9 @@ class CheckoutSignupConfigProviderTest extends TestCase
     private function quote(?int $id, ?int $optIn): Quote
     {
         $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->onlyMethods(['getId'])->getMock();
-        $quote->method('getId')->willReturn($id);
-        $quote->setData(CheckoutOptInInterface::QUOTE_FIELD, $optIn);
+        // Magento hands the id and the stored choice over as strings
+        $quote->method('getId')->willReturn($id === null ? null : (string)$id);
+        $quote->setData(CheckoutOptInInterface::QUOTE_FIELD, $optIn === null ? null : (string)$optIn);
 
         return $quote;
     }

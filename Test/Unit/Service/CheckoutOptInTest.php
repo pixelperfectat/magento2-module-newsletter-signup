@@ -25,7 +25,7 @@ class CheckoutOptInTest extends TestCase
      */
     private array $subscriptions = [];
 
-    /** @var list<string> */
+    /** @var list<array{message: string, context: array<string, mixed>}> */
     private array $loggedErrors = [];
 
     private bool $subscriptionFails = false;
@@ -79,6 +79,15 @@ class CheckoutOptInTest extends TestCase
         $this->assertSame('checkout', $this->sourceContext->getSource());
     }
 
+    public function testACustomerSignUpFromTheCheckoutIsCreditedToTheCheckout(): void
+    {
+        $this->sourceContext->rememberSource('order_email');
+
+        $this->optIn->subscribeAfterOrder($this->quote(true), $this->customerOrder(42, 'john.smith@example.com', 3));
+
+        $this->assertSame('checkout', $this->sourceContext->getSource());
+    }
+
     public function testAnUntickedBoxSignsNobodyUp(): void
     {
         $this->optIn->subscribeAfterOrder($this->quote(false), $this->guestOrder('jane.doe@example.com', 2));
@@ -108,7 +117,11 @@ class CheckoutOptInTest extends TestCase
         $this->optIn->subscribeAfterOrder($this->quote(true), $this->guestOrder('jane.doe@example.com', 2));
 
         $this->assertCount(1, $this->loggedErrors);
-        $this->assertStringContainsString('Mail server gone', $this->loggedErrors[0]);
+        $this->assertSame(
+            'Newsletter sign-up: the checkout sign-up failed: Mail server gone',
+            $this->loggedErrors[0]['message']
+        );
+        $this->assertInstanceOf(\RuntimeException::class, $this->loggedErrors[0]['context']['exception'] ?? null);
     }
 
     private function quote(?bool $optIn): Quote
@@ -125,7 +138,8 @@ class CheckoutOptInTest extends TestCase
     {
         $order = $this->createMock(OrderInterface::class);
         $order->method('getCustomerEmail')->willReturn($email);
-        $order->method('getStoreId')->willReturn($storeId);
+        // Magento hands ids over as strings
+        $order->method('getStoreId')->willReturn((string)$storeId);
         $order->method('getCustomerIsGuest')->willReturn(1);
         $order->method('getCustomerId')->willReturn(null);
 
@@ -136,9 +150,9 @@ class CheckoutOptInTest extends TestCase
     {
         $order = $this->createMock(OrderInterface::class);
         $order->method('getCustomerEmail')->willReturn($email);
-        $order->method('getStoreId')->willReturn($storeId);
+        $order->method('getStoreId')->willReturn((string)$storeId);
         $order->method('getCustomerIsGuest')->willReturn(0);
-        $order->method('getCustomerId')->willReturn($customerId);
+        $order->method('getCustomerId')->willReturn((string)$customerId);
 
         return $order;
     }
@@ -167,8 +181,8 @@ class CheckoutOptInTest extends TestCase
 
         $logger = $this->createMock(LoggerInterface::class);
         $logger->method('error')->willReturnCallback(
-            function (string|\Stringable $message): void {
-                $this->loggedErrors[] = (string)$message;
+            function (string|\Stringable $message, array $context = []): void {
+                $this->loggedErrors[] = ['message' => (string)$message, 'context' => $context];
             }
         );
 
