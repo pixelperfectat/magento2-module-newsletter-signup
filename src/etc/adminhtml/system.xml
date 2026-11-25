@@ -63,6 +63,22 @@
                         <field id="enabled">1</field>
                     </depends>
                 </field>
+                <field id="pending_note_text" translate="label comment" type="textarea" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Note After a Checkout Sign-up, Confirmation Pending</label>
+                    <comment>Shown instead of the block when the shopper ticked the checkout sign-up line and still has to click the link in the confirmation email.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="subscribed_note_text" translate="label comment" type="textarea" sortOrder="60"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Note After a Checkout Sign-up, Subscribed</label>
+                    <comment>Shown instead of the block when the shopper ticked the checkout sign-up line and is subscribed, because the shop does not ask for confirmation.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
             </group>
             <group id="signup_source" translate="label" sortOrder="200" showInDefault="1">
                 <label>Sign-up Sources</label>

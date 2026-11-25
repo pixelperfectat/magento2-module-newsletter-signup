@@ -13,6 +13,8 @@
                 <hide_unsubscribed>0</hide_unsubscribed>
                 <benefit_text>Subscribe to our newsletter and be the first to hear about new products and offers.</benefit_text>
                 <tracking_params/>
+                <pending_note_text>Almost done: we have sent you an email. Please click the link in it to confirm your newsletter subscription.</pending_note_text>
+                <subscribed_note_text>Thank you, you are now subscribed to our newsletter.</subscribed_note_text>
             </signup_confirmation_page>
         </newsletter>
     </default>

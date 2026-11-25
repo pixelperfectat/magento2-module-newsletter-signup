@@ -8,10 +8,20 @@ use PixelPerfect\NewsletterSignup\ViewModel\ConfirmationPageInvitation;
 /** @var Escaper $escaper */
 /** @var ConfirmationPageInvitation $invitation */
 $invitation = $block->getData('invitation');
-if (!$invitation->isVisible()) {
+$note = $invitation->getNoteText();
+if ($note === '' && !$invitation->isVisible()) {
     return;
 }
 ?>
+<?php if ($note !== ''): ?>
+<section class="newsletter-signup-confirmation card my-8 max-w-2xl"
+         aria-labelledby="newsletter-signup-confirmation-title">
+    <h2 id="newsletter-signup-confirmation-title" class="mb-2 text-xl font-semibold">
+        <?= $escaper->escapeHtml(__('Our Newsletter')) ?>
+    </h2>
+    <p><?= /* @noEscape */ nl2br($escaper->escapeHtml($note)) ?></p>
+</section>
+<?php else: ?>
 <section class="newsletter-signup-confirmation card my-8 max-w-2xl"
          aria-labelledby="newsletter-signup-confirmation-title">
     <h2 id="newsletter-signup-confirmation-title" class="mb-2 text-xl font-semibold">
@@ -36,3 +46,4 @@ if (!$invitation->isVisible()) {
         </button>
     </form>
 </section>
+<?php endif; ?>
