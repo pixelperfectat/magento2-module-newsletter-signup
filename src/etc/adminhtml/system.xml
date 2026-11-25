@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="newsletter">
+            <group id="signup_source" translate="label" sortOrder="200" showInDefault="1">
+                <label>Sign-up Sources</label>
+                <field id="extra_sources" translate="label comment" sortOrder="10" showInDefault="1">
+                    <label>Extra Sources</label>
+                    <frontend_model>PixelPerfect\NewsletterSignup\Block\Adminhtml\Form\Field\ExtraSignupSources</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment><![CDATA[Places of your own, such as a landing page. Codes use lower-case letters, digits and underscores. Credit a source with the <code>nl_source</code> parameter on any shop link, for example <code>?nl_source=landing_page</code>.]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

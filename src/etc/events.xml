@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="newsletter_subscriber_save_after">
+        <observer name="pixelperfect_newsletter_signup_record_source"
+                  instance="PixelPerfect\NewsletterSignup\Observer\RecordSignupSource"/>
+    </event>
+</config>
