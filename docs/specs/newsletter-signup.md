@@ -26,12 +26,12 @@ On top of that status check the module invites people only when it makes sense:
 
 - **Checkout:** a light sign-up line with a short benefit, not pre-ticked, in the Luma checkout. When the
   shopper ticks it, the order's email address is signed up after the order is placed, and Magento sends its
-  confirmation email. A companion module, `magento2-module-newsletter-signup-hyva-checkout`, adds the same
+  confirmation email. A separate Hyvä Checkout companion module adds the same
   line to Hyvä Checkout.
 - **Order confirmation page:** a fuller block with the benefit written out and one clear button that signs the
   order's email address up (Magento then sends the confirmation email). It works in the Luma theme and the Hyvä
   theme.
-- **Order and shipment emails:** the existing `magento2-module-sales-email` asks the status check, when this
+- **Order and shipment emails:** the existing sales email module asks the status check, when this
   module is installed, and hides its invitation block for pending and confirmed subscribers.
 
 Both invitations show for **not subscribed** and, by default, for **unsubscribed** (so former subscribers can
@@ -102,7 +102,7 @@ remembers until the shopper signs up.
 
 - **Two modules.** `magento2-module-newsletter-signup` (core) holds the status check, the invitation decision,
   the checkout opt-in handling, the Luma checkout line and the order confirmation page block for both the Luma
-  and the Hyvä theme. `magento2-module-newsletter-signup-hyva-checkout` holds only the Hyvä Checkout line. It
+  and the Hyvä theme. The Hyvä Checkout companion holds only the Hyvä Checkout line. It
   is separate because its component extends a Hyvä Checkout class; a class whose parent is missing breaks
   `setup:di:compile` in shops without Hyvä Checkout. The companion requires core; core never names the
   companion.
@@ -138,7 +138,7 @@ remembers until the shopper signs up.
   unsubscribed"; per place benefit text (CMS-free text or a CMS block identifier, the builder decides); tracking
   parameters appended to the confirmation page button link. Placeholder texts ship as defaults; the real
   wording is not decided yet.
-- **Sales email integration (in `magento2-module-sales-email`).** The invitation view model asks the status
+- **Sales email integration (in the sales email module).** The invitation view model asks the status
   check when core is installed, using the order's email and the order store's website. Not subscribed: the
   invitation as today. Pending and confirmed: nothing by default, with a configurable CMS block per state
   (sanitised the same way as the invitation). Unsubscribed: the invitation by default, with a setting to hide
@@ -181,8 +181,8 @@ remembers until the shopper signs up.
 - **Templates and the Hyvä Checkout component** are thin and have no logic of their own; they are verified in
   the lab shop with screenshots for Luma checkout, Hyvä Checkout, the Luma and the Hyvä confirmation page, and
   the order and shipment emails.
-- **Prior art:** the unit tests of `magento2-module-sales-email` (view models with faked Magento edges) and of
-  `magento2-module-store-pickup`. Quality gates as in those modules: PHPStan, the shared coding standard,
+- **Prior art:** the unit tests of the sales email module (view models with faked Magento edges) and of
+  the other pixelperfectat modules. Quality gates as in those modules: PHPStan, the shared coding standard,
   PHPUnit and Infection (MSI ≥ 85, covered MSI ≥ 90).
 
 ## Out of Scope
@@ -199,7 +199,7 @@ remembers until the shopper signs up.
 ## Further Notes
 
 - Work is split across three repositories; `Task:` issues in the Hyvä Checkout companion and in
-  `magento2-module-sales-email` are sub-issues of this one.
+  the sales email module are sub-issues of this one.
 - Release order: core `0.1.0` first, then the Hyvä Checkout companion and the sales email change.
 - An invitation in a transactional email to someone who unsubscribed can be a legal question in some
   countries; the "hide for unsubscribed" setting exists so each shop can decide.
