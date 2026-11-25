@@ -151,6 +151,28 @@ shopper.
 
 Sources live in their own table. Removing the module leaves Magento's subscribers untouched.
 
+## Automated testing (Playwright)
+
+The Playwright suite in `Test/Playwright` tests the storefront of a running Magento store with the module
+enabled. It is not part of CI. Every test places a real guest order and creates subscribers with fresh
+addresses on a reserved domain, so run it against a development or staging store, never production.
+
+```bash
+cd Test/Playwright
+npm install
+npx playwright install chromium
+cp .env.example .env
+# Edit .env: PLAYWRIGHT_BASE_URL, the store view codes, the product and the shipping and payment methods
+npm test               # every enabled project
+npm run test:luma      # Luma store view, Magento's own checkout
+npm run test:hyva      # Hyvä store view (set HYVA_ENABLED=1 and HYVA_CHECKOUT)
+```
+
+It covers the confirmation page block (shown to a new guest, the button signs them up, hidden for a
+subscriber), the Luma checkout line (unticked by default, the note after a ticked order, hidden for a
+subscriber) and the `nl_source` script. The line in Hyvä Checkout is tested by the Hyvä Checkout companion
+module's own suite.
+
 ## Status
 
 In development, not released yet. The first release is `0.1.0`.
