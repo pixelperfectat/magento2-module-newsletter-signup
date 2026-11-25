@@ -11,6 +11,8 @@
                 type="PixelPerfect\NewsletterSignup\Service\SignupSourceRecorder"/>
     <preference for="PixelPerfect\NewsletterSignup\Api\Service\InvitationDecisionInterface"
                 type="PixelPerfect\NewsletterSignup\Service\InvitationDecision"/>
+    <preference for="PixelPerfect\NewsletterSignup\Api\Service\CheckoutOptInInterface"
+                type="PixelPerfect\NewsletterSignup\Service\CheckoutOptIn"/>
 
     <!-- Places that invite to the newsletter, each with the configuration group of its enabled and
          hide_unsubscribed flags. Add a place: one more item here. -->
