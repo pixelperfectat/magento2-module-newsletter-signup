@@ -75,6 +75,26 @@ class SubscriptionStatusCheckTest extends TestCase
         );
     }
 
+    public function testNonAsciiCapitalsInTheEmailAreMatchedToo(): void
+    {
+        $this->rows[1]['änne.doe@example.com'] = ['subscriber_status' => '1'];
+
+        $this->assertSame(
+            SubscriptionStatus::Confirmed,
+            $this->check->getStatus('ÄNNE.DOE@example.com', 1)
+        );
+    }
+
+    public function testAnUnknownSubscriberStatusCountsAsNotSubscribed(): void
+    {
+        $this->rows[1]['jane.doe@example.com'] = ['subscriber_status' => '9'];
+
+        $this->assertSame(
+            SubscriptionStatus::NotSubscribed,
+            $this->check->getStatus('jane.doe@example.com', 1)
+        );
+    }
+
     public function testASubscriptionOnAnotherWebsiteDoesNotCountOnThisOne(): void
     {
         $this->rows[2]['jane.doe@example.com'] = ['subscriber_status' => '1'];

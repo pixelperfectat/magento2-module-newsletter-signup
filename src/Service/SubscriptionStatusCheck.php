@@ -23,8 +23,11 @@ class SubscriptionStatusCheck implements SubscriptionStatusCheckInterface
     public function getStatus(string $email, int $websiteId): SubscriptionStatus
     {
         $row = $this->subscriberResource->loadBySubscriberEmail(mb_strtolower(trim($email)), $websiteId);
+        if (!isset($row['subscriber_status'])) {
+            return SubscriptionStatus::NotSubscribed;
+        }
 
-        return match ((int)($row['subscriber_status'] ?? 0)) {
+        return match ((int)$row['subscriber_status']) {
             Subscriber::STATUS_SUBSCRIBED => SubscriptionStatus::Confirmed,
             Subscriber::STATUS_NOT_ACTIVE, Subscriber::STATUS_UNCONFIRMED => SubscriptionStatus::Pending,
             Subscriber::STATUS_UNSUBSCRIBED => SubscriptionStatus::Unsubscribed,
