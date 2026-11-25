@@ -50,6 +50,33 @@ The places are `checkout` and `confirmation_page`. Add your own as one more item
 `PixelPerfect\NewsletterSignup\Service\InvitationDecision` in `di.xml`: the item name is the place code, the
 value the configuration group that holds its `enabled` and `hide_unsubscribed` flags.
 
+## Checkout sign-up line
+
+In the Luma checkout, a shopper whose email address is not subscribed sees an unticked box with the benefit text
+above the "Place Order" button. When they tick it, the order's email address is signed up after the order is
+placed: Magento's subscription manager sends its confirmation email when the shop requires one, and the
+subscriber gets the source "Checkout". A logged-in customer is signed up with their account. Unticked, nothing
+happens. A failing sign-up is logged and never affects the order.
+
+Whether the box shows is decided only for the email address already on the shopper's own cart: at page load for
+a logged-in customer, and for a guest once the email reached the cart with the payment information. The
+storefront never gets to ask about any other address.
+
+Settings per store view, under Stores > Configuration > Customers > Newsletter > Sign-up Line in the Checkout:
+
+| Setting | Default |
+|---|---|
+| Enabled | Yes |
+| Hide for Unsubscribed | No |
+| Benefit Text | A placeholder; write your own. It is the label of the box |
+
+The choice is stored on the cart in the `pixelperfect_newsletter_opt_in` column of the `quote` table. Other
+checkouts can use the same mechanism: store the choice with
+`PixelPerfect\NewsletterSignup\Api\Service\CheckoutSignupInterface::setOptIn($cartId, $optIn)` (or the REST
+routes `PUT /V1/carts/mine/newsletter-signup` and `PUT /V1/guest-carts/:cartId/newsletter-signup` with
+`{"optIn": true}`), ask `isInvited($cartId)` (also `GET` on the same routes) to show or hide the box, and the
+module signs the shopper up after the order.
+
 ## Order confirmation page block
 
 On the Luma checkout success page, a shopper whose order email is not subscribed sees a block with the benefit
