@@ -38,13 +38,14 @@ without touching code. The README shows how.
 - An icon, then the benefit text. The text up to and including the first full stop shows in bold; the rest in
   normal weight. Text without a full stop shows in normal weight.
 - The text stays one plain text field ("Benefit Text", per store view). Still escaped; no HTML.
-- New default (en_US), leading with the reason: "Be the first to hear about new products and offers. Sign me up
-  for the newsletter, about twice a month, unsubscribe any time." German (de_DE, formal "Sie") to match.
+- New default, leading with the reason: "Be the first to hear about new products and offers. Sign me up for the
+  newsletter, a few times a month, unsubscribe any time." Configuration defaults are not translated per locale,
+  so the default is English only; the README gives German (formal "Sie") examples for shops to paste.
 - The box stays unticked.
 
 ### Icon
 
-- An envelope with a small sparkle, thin outline, about text height, in the theme's accent colour
+- The Heroicons outline envelope, about text height, in the theme's accent colour
   (`currentColor` on a coloured wrapper). Decorative: `aria-hidden="true"`, no title.
 - Hyvä: from the theme's Heroicons set through its icon view model; no Hyvä template code is copied. Luma: the
   same outline as inline SVG in the module's own template.
@@ -57,12 +58,13 @@ without touching code. The README shows how.
   content, the block replaces the benefit text; otherwise the plain text shows. The "Subscribe" button stays
   the module's own, below the content.
 - The block content is shop-owned HTML (heading, points, an image).
-- Default stays plain text, with a fuller default reason (en_US and de_DE).
+- Default stays plain text, with a fuller default reason (English, as above).
 
 ### Email invitation (sales-email)
 
-- The default invitation CMS block gets the same reasons, worded for an email. An unedited default block is
-  updated on `setup:upgrade`, as with the earlier link change; an edited one is left alone.
+No change. Its default invitation block already leads with the reason ("Be the first to hear about new products
+and offers."), lists three points and says how to unsubscribe. The new checkout and confirmation page defaults
+use the same reasons.
 
 ### README (core, and a pointer from the companion and sales-email)
 
@@ -77,12 +79,11 @@ A "Wording the invitation" section:
 
 ## Left to the builder
 
-- Exact German default wording (formal "Sie").
+- The German README examples (formal "Sie").
 - How the bold part is split (first sentence end) and edge cases such as abbreviations; keep it predictable and
   documented.
-- Which Heroicon (or a close outline) best reads as "newsletter".
 - Tests: template output for the bold split, the icon switch, the CMS block fallback; lab check in Luma and Hyvä.
 
 ## Release
 
-Core, companion and sales-email each get a release; versions follow the commits.
+Core and the companion each get a release; versions follow the commits. Sales-email needs none.
