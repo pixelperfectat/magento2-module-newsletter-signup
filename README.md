@@ -11,8 +11,10 @@ Invites shoppers to the newsletter only when they are not subscribed yet, and sa
 - The place each subscriber signed up from, shown as a "Source" column with a filter in the admin newsletter
   subscriber grid.
 
-Magento's own double opt-in stays in charge: the module never subscribes anyone without the confirmation
-click.
+Magento's own double opt-in stays in charge: every sign-up goes through Magento's subscription manager. With
+"Need to Confirm" on (Stores > Configuration > Customers > Newsletter > Subscription Options), nobody is
+subscribed before the confirmation click. With it off, which is Magento's default, a sign-up is subscribed at
+once.
 
 ## Subscription status check
 
